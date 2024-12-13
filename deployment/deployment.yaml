@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: conv-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      components: conv-app
+  template:
+    metadata:
+      name: conv-app
+      labels:
+        components: conv-app
+    spec:
+      containers:
+        - name: conv-app
+          image: mirror.gcr.io/antonlarichev/conv-app:1.2
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: "200m"
+              memory: "256Mi"
