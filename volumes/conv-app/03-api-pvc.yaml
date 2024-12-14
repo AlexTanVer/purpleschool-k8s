@@ -2,6 +2,7 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: api-pv
+  namespace: conv-app
   labels:
     storage: api
 spec:
@@ -17,6 +18,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: api-pvc
+  namespace: conv-app
 spec:
   storageClassName: standard
   accessModes:

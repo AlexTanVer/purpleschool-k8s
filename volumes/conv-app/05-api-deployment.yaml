@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: api-deployment
+  namespace: conv-app
 spec:
   replicas: 1
   selector:
@@ -14,7 +15,7 @@ spec:
         components: api
     spec:
       containers:
-        - name: app
+        - name: api
           image: mirror.gcr.io/antonlarichev/conv-api:1.0
           ports:
             - containerPort: 3000
@@ -25,24 +26,24 @@ spec:
           env:
             - name: AMQP_EXCHANGE
               valueFrom:
-                secretKeyRef:
-                  key: rmq-exchange
-                  name: api-secret
+                configMapKeyRef:
+                  key: rabbitmq-exchange
+                  name: rabbitmq-config
             - name: AMQP_USER
               valueFrom:
                 secretKeyRef:
                   key: user
-                  name: rmq-secret
+                  name: rabbitmq-secret
             - name: AMQP_PASSWORD
               valueFrom:
                 secretKeyRef:
                   key: password
-                  name: rmq-secret
+                  name: rabbitmq-secret
             - name: AMQP_HOSTNAME
               valueFrom:
-                secretKeyRef:
-                  key: host
-                  name: rmq-secret
+                configMapKeyRef:
+                  key: rabbitmq-host
+                  name: rabbitmq-config
           volumeMounts:
             - mountPath: /opt/app/uploads
               name: api-data

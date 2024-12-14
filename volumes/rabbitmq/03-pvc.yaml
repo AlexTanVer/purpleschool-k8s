@@ -1,9 +1,10 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: rmq-pv
+  name: main-pv
+  namespace: rabbitmq
   labels:
-    storage: rmq
+    storage: main
 spec:
   storageClassName: standard
   capacity:
@@ -16,7 +17,8 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: rmq-pvc
+  name: pvc
+  namespace: rabbitmq
 spec:
   storageClassName: standard
   accessModes:
@@ -26,4 +28,4 @@ spec:
       storage: 1Gi
   selector:
     matchLabels:
-      storage: rmq
+      storage: main

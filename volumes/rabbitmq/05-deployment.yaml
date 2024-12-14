@@ -1,7 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: rmq-deployment
+  name: deployment
+  namespace: rabbitmq
 spec:
   replicas: 1
   selector:
@@ -27,17 +28,17 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: user
-                  name: rmq-secret
+                  name: secret
             - name: RABBITMQ_DEFAULT_PASS
               valueFrom:
                 secretKeyRef:
                   key: password
-                  name: rmq-secret
+                  name: secret
           volumeMounts:
             - mountPath: /var/lib/rabbitmq
-              name: rmq-data
+              name: data
               subPath: rabbitmq
       volumes:
-        - name: rmq-data
+        - name: data
           persistentVolumeClaim:
-            claimName: rmq-pvc
+            claimName: pvc

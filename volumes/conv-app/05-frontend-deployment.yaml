@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: frontend-deployment
+  namespace: conv-app
 spec:
   replicas: 1
   selector:
@@ -14,7 +15,7 @@ spec:
         components: frontend
     spec:
       containers:
-        - name: app
+        - name: frontend
           image: mirror.gcr.io/antonlarichev/conv-app:1.2
           ports:
             - containerPort: 80
@@ -22,3 +23,6 @@ spec:
             limits:
               memory: "500Mi"
               cpu: "300m"
+          envFrom:
+            - configMapRef:
+                name: frontend-config

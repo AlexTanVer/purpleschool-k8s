@@ -2,21 +2,12 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: app-ingress
+  namespace: conv-app
   annotations:
     nginx.ingress.kubernetes.io/add-base-url: "true"
 spec:
   ingressClassName: nginx
   rules:
-    - host: rmq-admin.conv-app.party-e.ru
-      http:
-        paths:
-          - backend:
-              service:
-                name: rmq-service
-                port:
-                  number: 15672
-            pathType: Prefix
-            path: /
     - host: frontend.conv-app.party-e.ru
       http:
         paths:
