@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: converter-deployment
+  namespace: conv-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      components: converter
+  template:
+    metadata:
+      name: converter
+      labels:
+        components: converter
+    spec:
+      containers:
+        - name: converter
+          image: mirror.gcr.io/antonlarichev/conv-service:1.0
+          resources:
+            limits:
+              cpu: "200m"
+              memory: "500Mi"
+          env:
+            - name: AMQP_EXCHANGE
+              valueFrom:
+                configMapKeyRef:
+                  key: rabbitmq-exchange
+                  name: rabbitmq-config
+            - name: AMQP_USER
+              valueFrom:
+                secretKeyRef:
+                  key: user
+                  name: rabbitmq-secret
+            - name: AMQP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: rabbitmq-secret
+            - name: AMQP_HOSTNAME
+              valueFrom:
+                configMapKeyRef:
+                  key: rabbitmq-host
+                  name: rabbitmq-config
+            - name: AMQP_QUEUE
+              valueFrom:
+                configMapKeyRef:
+                  key: rabbitmq-queue
+                  name: rabbitmq-config

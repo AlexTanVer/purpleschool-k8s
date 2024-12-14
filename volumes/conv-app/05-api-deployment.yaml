@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-deployment
+  namespace: conv-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      components: api
+  template:
+    metadata:
+      name: api
+      labels:
+        components: api
+    spec:
+      containers:
+        - name: api
+          image: mirror.gcr.io/antonlarichev/conv-api:1.0
+          ports:
+            - containerPort: 3000
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
+          env:
+            - name: AMQP_EXCHANGE
+              valueFrom:
+                configMapKeyRef:
+                  key: rabbitmq-exchange
+                  name: rabbitmq-config
+            - name: AMQP_USER
+              valueFrom:
+                secretKeyRef:
+                  key: user
+                  name: rabbitmq-secret
+            - name: AMQP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: rabbitmq-secret
+            - name: AMQP_HOSTNAME
+              valueFrom:
+                configMapKeyRef:
+                  key: rabbitmq-host
+                  name: rabbitmq-config
+          volumeMounts:
+            - mountPath: /opt/app/uploads
+              name: api-data
+      volumes:
+        - name: api-data
+          persistentVolumeClaim:
+            claimName: api-pvc

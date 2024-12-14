@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  namespace: conv-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      components: frontend
+  template:
+    metadata:
+      name: frontend
+      labels:
+        components: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: mirror.gcr.io/antonlarichev/conv-app:1.2
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              memory: "500Mi"
+              cpu: "300m"
+          envFrom:
+            - configMapRef:
+                name: frontend-config

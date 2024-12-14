@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rabbitmq-config
+  namespace: conv-app
+data:
+  rabbitmq-exchange: "converter"
+  rabbitmq-queue: "converter"
+  rabbitmq-host: "service.rabbitmq"

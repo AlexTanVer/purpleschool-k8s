@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: service
+  namespace: rabbitmq
+spec:
+  type: ClusterIP
+  ports:
+    - port: 15672
+      protocol: TCP
+      name: admin
+    - port: 5672
+      protocol: TCP
+      name: main
+  selector:
+    components: rabbitmq

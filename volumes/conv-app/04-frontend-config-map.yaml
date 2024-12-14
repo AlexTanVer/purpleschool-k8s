@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-config
+  namespace: conv-app
+data:
+  VITE_DOMAIN: "http://frontend.conv-app.party-e.ru"
