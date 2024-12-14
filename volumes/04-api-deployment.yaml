@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      components: api
+  template:
+    metadata:
+      name: api
+      labels:
+        components: api
+    spec:
+      containers:
+        - name: app
+          image: mirror.gcr.io/antonlarichev/conv-api:1.0
+          ports:
+            - containerPort: 3000
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
+          env:
+            - name: AMQP_EXCHANGE
+              valueFrom:
+                secretKeyRef:
+                  key: rmq-exchange
+                  name: api-secret
+            - name: AMQP_USER
+              valueFrom:
+                secretKeyRef:
+                  key: user
+                  name: rmq-secret
+            - name: AMQP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: rmq-secret
+            - name: AMQP_HOSTNAME
+              valueFrom:
+                secretKeyRef:
+                  key: host
+                  name: rmq-secret
+          volumeMounts:
+            - mountPath: /opt/app/uploads
+              name: api-data
+      volumes:
+        - name: api-data
+          persistentVolumeClaim:
+            claimName: api-pvc
