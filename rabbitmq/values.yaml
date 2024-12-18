@@ -1,0 +1,33 @@
+app:
+  namespace: rabbitmq
+  name: rabbitmq
+  components: rabbitmq
+  version: 3.12.7
+  config:
+    credentials:
+      user: user
+      password: password
+    envs:
+      - name: RABBITMQ_DEFAULT_USER
+        secretKey: user
+      - name: RABBITMQ_DEFAULT_PASS
+        secretKey: password
+
+deployment:
+  replicas: 1
+  limits:
+    memory: "500Mi"
+    cpu: "500m"
+  hosts:
+    admin: rmq-admin.conv-app.party-e.ru
+  ports:
+    main: 5672
+    admin: 15672
+
+registry:
+  mirror: mirror.gcr.io
+
+storage:
+  name: rabbitmq-standard
+  provisioner: kubernetes.io/no-provisioner
+  capacity: 1Gi

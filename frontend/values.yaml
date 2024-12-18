@@ -1,11 +1,10 @@
 app:
-  namespace: conv-app-frontend
+  namespace: frontend
   name: frontend
-  components: frontend
   version: 1.2
   config:
     api:
-      host: http://frontend.conv-app.party-e.ru
+      host: http://api.conv-app.party-e.ru
 
 deployment:
   host: frontend.conv-app.party-e.ru

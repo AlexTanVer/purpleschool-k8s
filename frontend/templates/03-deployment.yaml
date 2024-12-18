@@ -7,12 +7,12 @@ spec:
   replicas: {{ .Values.deployment.replicas }}
   selector:
     matchLabels:
-      components: {{ .Values.app.components }}
+      components: {{ .Values.app.name }}
   template:
     metadata:
       name: {{ .Values.app.name }}
       labels:
-        components: {{ .Values.app.components }}
+        components: {{ .Values.app.name }}
     spec:
       containers:
         - name: {{ .Values.app.name }}
