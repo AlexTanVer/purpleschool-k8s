@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.app.name }}-deployment
+  namespace: {{ .Values.app.namespace }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  selector:
+    matchLabels:
+      components: {{ .Values.app.components }}
+  template:
+    metadata:
+      name: {{ .Values.app.name }}
+      labels:
+        components: {{ .Values.app.components }}
+    spec:
+      containers:
+        - name: frontend
+          image: "{{ .Values.registry.mirror }}/antonlarichev/conv-app:{{ .Values.app.version }}"
+          ports:
+            - containerPort: 80
+          resources:
+            limits: {{ .Values.deployment.limits | toYaml | nindent 14 }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.app.name }}-config
