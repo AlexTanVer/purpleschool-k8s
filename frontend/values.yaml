@@ -1,0 +1,19 @@
+app:
+  namespace: conv-app-frontend
+  name: frontend
+  components: frontend
+  version: 1.2
+  config:
+    api:
+      host: http://frontend.conv-app.party-e.ru
+
+deployment:
+  host: frontend.conv-app.party-e.ru
+  port: 80
+  replicas: 1
+  limits:
+    memory: "500Mi"
+    cpu: "300m"
+
+registry:
+  mirror: mirror.gcr.io
