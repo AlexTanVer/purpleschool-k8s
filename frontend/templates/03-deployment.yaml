@@ -15,10 +15,10 @@ spec:
         components: {{ .Values.app.components }}
     spec:
       containers:
-        - name: frontend
+        - name: {{ .Values.app.name }}
           image: "{{ .Values.registry.mirror }}/antonlarichev/conv-app:{{ .Values.app.version }}"
           ports:
-            - containerPort: 80
+            - containerPort: {{ .Values.deployment.port }}
           resources:
             limits: {{ .Values.deployment.limits | toYaml | nindent 14 }}
           envFrom:

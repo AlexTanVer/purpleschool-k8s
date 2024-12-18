@@ -1,5 +1,5 @@
 app:
-  namespace: conv-app
+  namespace: conv-app-frontend
   name: frontend
   components: frontend
   version: 1.2

@@ -1,6 +1,6 @@
 apiVersion: v2
-name: conv-app
-description: App for image converting
+name: conv-app-frontend
+description: Frontend for image converting
 
 # A chart can be either an 'application' or a 'library' chart.
 #
