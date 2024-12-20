@@ -4,9 +4,6 @@ app:
   components: rabbitmq
   version: 3.12.7
   config:
-    credentials:
-      user: user
-      password: password
     envs:
       - name: RABBITMQ_DEFAULT_USER
         secretKey: user
