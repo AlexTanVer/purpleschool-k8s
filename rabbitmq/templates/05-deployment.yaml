@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.app.name }}-deployment
+  namespace: {{ .Values.app.namespace }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  selector:
+    matchLabels:
+      components: {{ .Values.app.name }}
+  template:
+    metadata:
+      name: {{ .Values.app.name }}
+      labels:
+        components: {{ .Values.app.name }}
+    spec:
+      containers:
+        - name: {{ .Values.app.name }}
+          image: {{ .Values.registry.mirror }}/rabbitmq:{{ .Values.app.version }}-management
+          resources:
+            limits: {{ .Values.deployment.limits | toYaml | nindent 14 }}
+          ports:
+            - containerPort: {{ .Values.deployment.ports.admin }}
+          env:
+            {{- range .Values.app.config.envs }}
+            {{- $secretName := printf "%s-secret" $.Values.app.name }}
+            {{- $data := dict "name" .name "secretKey" .secretKey "secretName" $secretName }}
+            {{- include "env.secret" $data | indent 12 }}
+            {{- end }}
+          volumeMounts:
+            - mountPath: /var/lib/rabbitmq
+              name: data
+              subPath: rabbitmq
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ .Values.app.name }}-pvc

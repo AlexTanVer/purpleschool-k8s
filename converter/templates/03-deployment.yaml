@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.app.name }}-deployment
+  namespace: {{ .Values.app.namespace }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  selector:
+    matchLabels:
+      components: {{ .Values.app.name }}
+  template:
+    metadata:
+      name: {{ .Values.app.name }}
+      labels:
+        components: {{ .Values.app.name }}
+    spec:
+      containers:
+        - name: {{ .Values.app.name }}
+          image: "{{ .Values.registry.mirror }}/antonlarichev/conv-service:{{ .Values.app.version }}"
+          resources:
+            limits: {{ .Values.deployment.limits | toYaml | nindent 14 }}
+          env:
+            - name: AMQP_EXCHANGE
+              valueFrom:
+                configMapKeyRef:
+                  key: exchange
+                  name: {{ .Values.app.name }}-rmq-config
+            - name: AMQP_USER
+              valueFrom:
+                secretKeyRef:
+                  key: user
+                  name: {{ .Values.app.name }}-rmq-secret
+            - name: AMQP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: {{ .Values.app.name }}-rmq-secret
+            - name: AMQP_HOSTNAME
+              valueFrom:
+                configMapKeyRef:
+                  key: host
+                  name: {{ .Values.app.name }}-rmq-config
+            - name: AMQP_QUEUE
+              valueFrom:
+                configMapKeyRef:
+                  key: queue
+                  name: {{ .Values.app.name }}-rmq-config

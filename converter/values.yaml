@@ -1,0 +1,21 @@
+app:
+  namespace: converter
+  name: converter
+  version: "1.0"
+  config:
+    rabbitmq:
+      exchange: converter
+      queue: converter
+      host: rabbitmq-service.rabbitmq
+      credentials:
+        user: user
+        password: password
+
+deployment:
+  replicas: 1
+  limits:
+    memory: "256Mi"
+    cpu: "200m"
+
+registry:
+  mirror: mirror.gcr.io

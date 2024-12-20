@@ -1,0 +1,28 @@
+app:
+  namespace: api
+  name: api
+  version: "1.0"
+  config:
+    rabbitmq:
+      exchange: converter
+      queue: converter
+      host: rabbitmq-service.rabbitmq
+      credentials:
+        user: user
+        password: password
+
+deployment:
+  replicas: 1
+  limits:
+    memory: "256Mi"
+    cpu: "200m"
+  host: api.conv-app.party-e.ru
+  port: 3000
+
+registry:
+  mirror: mirror.gcr.io
+
+storage:
+  name: api-standard
+  provisioner: kubernetes.io/no-provisioner
+  capacity: 1Gi

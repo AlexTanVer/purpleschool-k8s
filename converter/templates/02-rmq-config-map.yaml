@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.app.name }}-rmq-config
+  namespace: {{ .Values.app.namespace }}
+data:
+  exchange: {{ .Values.app.config.rabbitmq.exchange | quote }}
+  queue: {{ .Values.app.config.rabbitmq.queue | quote }}
+  host: {{ .Values.app.config.rabbitmq.host | quote }}
